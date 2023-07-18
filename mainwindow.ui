@@ -14,17 +14,23 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>300</y>
-      <width>381</width>
+      <width>80</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>？</string>
+     <string>这是一个按钮</string>
+    </property>
+    <property name="autoDefault">
+     <bool>true</bool>
+    </property>
+    <property name="default">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

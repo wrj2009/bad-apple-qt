@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QCheckBox>
+#include <QCoreApplication>
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QUrl>
 
 #include <fstream>
 #include <cstring>
@@ -61,7 +65,7 @@ void MainWindow::play()
                 boxes[i][j]->setChecked(line[i * 24 + j] - '0');
             }
         }
-        QApplication::processEvents();
+        QCoreApplication::processEvents();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fps));
     }
     text.close();
@@ -73,4 +77,12 @@ void MainWindow::on_actionStart_triggered()
         this->play();
     });
     playThread.detach();
+
+    QMediaPlayer* player = new QMediaPlayer;
+    QAudioOutput* audioOutput = new QAudioOutput;
+    player->setAudioOutput(audioOutput);
+    connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
+    player->setSource(QUrl::fromLocalFile("E:\\Qt\\BadApple.mp3"));
+    audioOutput->setVolume(50);
+    player->play();
 }
