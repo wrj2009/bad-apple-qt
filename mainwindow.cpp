@@ -2,8 +2,16 @@
 #include "ui_mainwindow.h"
 #include <QCheckBox>
 
-QCheckBox *boxes[18][24];
+#include <fstream>
+#include <cstring>
+#include <cstdio>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <functional>
 
+
+QCheckBox *boxes[18][24];
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -43,9 +51,26 @@ void MainWindow::on_actionUnselectAll_triggered()
 }
 
 int fps = 15;
+void MainWindow::play()
+{
+    std::ifstream text("E:\\Qt\\badapple.txt");
+    std::string line;
+    while (std::getline(text, line)) {
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < 24; j++) {
+                boxes[i][j]->setChecked(line[i * 24 + j] - '0');
+            }
+        }
+        QApplication::processEvents();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fps));
+    }
+    text.close();
+}
 
 void MainWindow::on_actionStart_triggered()
 {
-    // 载入 E:\\Qt\\badapple.txt 并开始播放，1=选中，0=未选中，每行一帧
+    std::thread playThread([this]() {
+        this->play();
+    });
+    playThread.detach();
 }
-

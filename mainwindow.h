@@ -24,5 +24,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void play();
 };
 #endif // MAINWINDOW_H
