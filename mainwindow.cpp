@@ -1,18 +1,19 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <chrono>
+#include <cstdio>
+#include <cstring>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <thread>
+
+#include <QAudioOutput>
 #include <QCheckBox>
 #include <QCoreApplication>
 #include <QMediaPlayer>
-#include <QAudioOutput>
 #include <QUrl>
 
-#include <fstream>
-#include <cstring>
-#include <cstdio>
-#include <iostream>
-#include <chrono>
-#include <thread>
-#include <functional>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 
 QCheckBox *boxes[18][24];
@@ -24,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i = 0; i < 18; i++) {
         for (int j = 0; j < 24; j++) {
             QCheckBox *c = new QCheckBox(ui->centralwidget);
-            c->setGeometry(j * 16, i * 16, 16, 16);
+            c->setGeometry(j * 14, i * 14, 14, 14);
             boxes[i][j] = c;
         }
     }
@@ -63,9 +64,10 @@ void MainWindow::play()
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 24; j++) {
                 boxes[i][j]->setChecked(line[i * 24 + j] - '0');
+                boxes[i][j]->update();
             }
         }
-        QCoreApplication::processEvents();
+//        QCoreApplication::processEvents();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fps));
     }
     text.close();
